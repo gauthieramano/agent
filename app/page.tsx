@@ -1,7 +1,6 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import { CopyIcon, RefreshCcwIcon } from "lucide-react";
 import { useState } from "react";
 import {
   Conversation,
@@ -9,13 +8,6 @@ import {
   ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
 import { Loader } from "@/components/ai-elements/loader";
-import {
-  Message,
-  MessageAction,
-  MessageActions,
-  MessageContent,
-  MessageResponse,
-} from "@/components/ai-elements/message";
 import {
   PromptInput,
   PromptInputActionAddAttachments,
@@ -42,6 +34,7 @@ import {
   ReasoningContent,
   ReasoningTrigger,
 } from "@/components/ai-elements/reasoning";
+import TextUiPartMessage from "@/components/text-ui-part-message";
 import { MODEL_NAMES, type ModelName } from "@/utils/constants";
 
 export default function Home() {
@@ -82,37 +75,14 @@ export default function Home() {
                   switch (part.type) {
                     case "text":
                       return (
-                        <Message
+                        <TextUiPartMessage
                           key={`${message.id}-${partIndex}`}
-                          from={message.role}
-                        >
-                          <MessageContent>
-                            <MessageResponse>{part.text}</MessageResponse>
-                          </MessageContent>
-
-                          {message.role === "assistant" &&
-                            message.id === lastMessageId && (
-                              <MessageActions>
-                                <MessageAction
-                                  onClick={() =>
-                                    regenerate({ body: { model } })
-                                  }
-                                  label="Retry"
-                                >
-                                  <RefreshCcwIcon className="size-3" />
-                                </MessageAction>
-
-                                <MessageAction
-                                  onClick={() =>
-                                    navigator.clipboard.writeText(part.text)
-                                  }
-                                  label="Copy"
-                                >
-                                  <CopyIcon className="size-3" />
-                                </MessageAction>
-                              </MessageActions>
-                            )}
-                        </Message>
+                          isLastMessage={message.id === lastMessageId}
+                          model={model}
+                          part={part}
+                          role={message.role}
+                          regenerate={regenerate}
+                        />
                       );
 
                     case "reasoning":
