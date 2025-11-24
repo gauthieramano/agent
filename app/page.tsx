@@ -2,6 +2,7 @@
 
 import { useChat } from "@ai-sdk/react";
 import { useState } from "react";
+import { match } from "ts-pattern";
 import {
   Conversation,
   ConversationContent,
@@ -31,41 +32,37 @@ export default function Home() {
           <ConversationContent>
             {messages.map((message) => (
               <div key={message.id}>
-                {message.parts.map((part, partIndex) => {
-                  switch (part.type) {
-                    case "text":
-                      return (
-                        <TextUiPartMessage
-                          key={`${message.id}-${partIndex}`}
-                          isLastMessage={message.id === lastMessageId}
-                          model={model}
-                          part={part}
-                          role={message.role}
-                          regenerate={regenerate}
-                        />
-                      );
+                {message.parts.map((part, partIndex) =>
+                  match(part)
+                    .with({ type: "text" }, (part) => (
+                      <TextUiPartMessage
+                        key={`${message.id}-${partIndex}`}
+                        isLastMessage={message.id === lastMessageId}
+                        model={model}
+                        part={part}
+                        role={message.role}
+                        regenerate={regenerate}
+                      />
+                    ))
 
-                    case "reasoning":
-                      return (
-                        <Reasoning
-                          key={`${message.id}-${partIndex}`}
-                          className="w-full"
-                          isStreaming={
-                            status === "streaming" &&
-                            partIndex === message.parts.length - 1 &&
-                            message.id === lastMessageId
-                          }
-                        >
-                          <ReasoningTrigger />
+                    .with({ type: "reasoning" }, (part) => (
+                      <Reasoning
+                        key={`${message.id}-${partIndex}`}
+                        className="w-full"
+                        isStreaming={
+                          status === "streaming" &&
+                          partIndex === message.parts.length - 1 &&
+                          message.id === lastMessageId
+                        }
+                      >
+                        <ReasoningTrigger />
 
-                          <ReasoningContent>{part.text}</ReasoningContent>
-                        </Reasoning>
-                      );
+                        <ReasoningContent>{part.text}</ReasoningContent>
+                      </Reasoning>
+                    ))
 
-                    default:
-                      return null;
-                  }
-                })}
+                    .otherwise(() => null),
+                )}
               </div>
             ))}
 
