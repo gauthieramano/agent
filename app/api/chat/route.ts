@@ -1,12 +1,16 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { openai } from "@ai-sdk/openai";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { MODELS, type ModelName } from "@/utils/constants";
+import { executePythonCode } from "@/utils/tools";
 
 // Allow streaming responses up to 1 minute
 export const maxDuration = 60;
 
-const SYSTEM_PROMPT =
-  "You are a helpful assistant that can answer questions and help with tasks";
+const MARKDOWN = path.join(process.cwd(), "utils/system-prompt.md");
+const SYSTEM_PROMPT = readFileSync(MARKDOWN, "utf-8");
+const TOOLS = { executePythonCode };
 
 type JsonRequest = {
   messages: UIMessage[];
@@ -19,6 +23,7 @@ export async function POST(req: Request) {
   const result = streamText({
     messages: convertToModelMessages(messages),
     system: SYSTEM_PROMPT,
+    tools: TOOLS,
 
     model: openai(MODELS[model]),
 
