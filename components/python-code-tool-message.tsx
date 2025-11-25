@@ -22,18 +22,21 @@ export default function PythonCodeToolMessage({ part, role }: Props) {
 
   return (
     <Message from={role}>
-      <MessageContent>
+      <MessageContent className="max-w-full">
         <Tool>
           <ToolHeader state={part.state} type={part.type} />
-
-          <ToolContent>
+          <ToolContent className="">
             <ToolInput input={part.input} />
 
             <p className="px-4 pt-4 font-medium text-muted-foreground text-xs uppercase tracking-wide">
               The code executed
             </p>
 
-            <CodeBlock code={code} language="py" className="m-4">
+            <CodeBlock
+              code={code}
+              language="py"
+              className="m-4 max-w-[calc(100%-(var(--spacing)*8))]"
+            >
               <CodeBlockCopyButton
                 onCopy={() => console.log("Copied code to clipboard")}
                 onError={() =>
