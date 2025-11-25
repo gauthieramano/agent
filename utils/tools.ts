@@ -29,7 +29,8 @@ export const executePythonCode = tool({
     const pyProxy = pyodide.runPython(code);
     const result = pyProxy.toString();
 
-    pyProxy.destroy();
+    // `pyProxy` don't always contain a `destroy` method
+    pyProxy.destroy?.();
 
     return result;
   },
