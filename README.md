@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Agent
 
-## Getting Started
+Full-stack app with a chat interface powered by an LLM agent capable of running Python code when needed.
 
-First, run the development server:
+The latest version of the application is deployed here via Vercel:
+https://agent.proj9ct.com
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Quick start
+
+First, you have to create at the root directory a `.env.local` file duplicating `.env.example` and putting a proper OpenAI API Key for `OPENAI_API_KEY`
+
+Then, you have to install the project with `Node.js 20.9` or later _(the `v24.11 (LTS)` is recommanded)_:
+
+```sh
+npm i
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then, it is recommanded to build the application and run it in Production mode _(for a better user experience)_:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+But instead, you can also run the development server:
 
-## Learn More
+```sh
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+In both cases, open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The `OPENAI_API_KEY` environment variable is required to deploy this application.
+
+As this application is a Next.js one, the easiest way to deploy it is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Linting with Biome
+
+To check if all the files are correctly linted, run this command:
+
+```sh
+npm run lint
+```
+
+To format all the files, run this command:
+
+```sh
+npm run format
+```
+
+## Technologies
+
+This project was bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+It uses:
+
+- [TypeScript](https://www.typescriptlang.org) _(v5)_
+- [React](https://react.dev) _(v19)_
+- [Next.js](https://nextjs.org) _(v16)_
+- [Vercel AI SDK](https://ai-sdk.dev) _(v6 beta)_ with [@ai-sdk/openai](https://www.npmjs.com/package/@ai-sdk/openai)
+- [Tailwind CSS](https://tailwindcss.com) _(v4)_
+- [shadcn/ui](https://ui.shadcn.com)
+- [AI Elements](https://ai-sdk.dev/elements)
+- [Zod](https://zod.dev) _(v4)_
+- [Biome](https://biomejs.dev) _(v2)_
+- [Pyodide](https://pyodide.org/) _(v0.29)_
