@@ -59,11 +59,8 @@ export default function Home() {
                     .with({ type: "tool-executePythonCode" }, (part) => (
                       <PythonCodeToolMessage
                         key={part.toolCallId}
-                        isLastMessage={isLast(message, partIndex)}
-                        model={model}
                         part={part}
                         role={message.role}
-                        regenerate={regenerate}
                       />
                     ))
 
