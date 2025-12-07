@@ -21,7 +21,11 @@ import type { ModelName } from "@/utils/constants";
 export default function Home() {
   const [model, setModel] = useState<ModelName>("GPT-5.1");
 
-  const { messages, sendMessage, status, regenerate } = useChat();
+  const { messages, sendMessage, status, regenerate } = useChat({
+    onFinish: ({ message }) => {
+      console.log({ message });
+    },
+  });
 
   const lastMessageId = messages.at(-1)?.id;
 
