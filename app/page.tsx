@@ -1,6 +1,7 @@
 "use client";
 
-import { useChat } from "@ai-sdk/react";
+import { type UIMessage, useChat } from "@ai-sdk/react";
+import type { UIDataTypes, UITools } from "ai";
 import { useState } from "react";
 import { match } from "ts-pattern";
 import {
@@ -30,6 +31,11 @@ export default function Home() {
 
   const lastMessageId = messages.at(-1)?.id;
 
+  const isLast = (
+    message: UIMessage<unknown, UIDataTypes, UITools>,
+    partIndex: number,
+  ) => message.id === lastMessageId && partIndex === message.parts.length - 1;
+
   return (
     <div className="relative mx-auto size-full h-screen max-w-4xl p-6">
       <div className="flex h-full flex-col">
@@ -42,7 +48,7 @@ export default function Home() {
                     .with({ type: "text" }, (part) => (
                       <TextUiPartMessage
                         key={`${message.id}-${partIndex}`}
-                        isLastMessage={message.id === lastMessageId}
+                        isLastMessage={isLast(message, partIndex)}
                         model={model}
                         part={part}
                         role={message.role}
@@ -52,12 +58,9 @@ export default function Home() {
 
                     .with({ type: "tool-executePythonCode" }, (part) => (
                       <PythonCodeToolMessage
-                        key={`${message.id}-${part.toolCallId}`}
-                        isLastMessage={message.id === lastMessageId}
-                        model={model}
+                        key={part.toolCallId}
                         part={part}
                         role={message.role}
-                        regenerate={regenerate}
                       />
                     ))
 
@@ -66,9 +69,7 @@ export default function Home() {
                         key={`${message.id}-${partIndex}`}
                         className="w-full"
                         isStreaming={
-                          status === "streaming" &&
-                          partIndex === message.parts.length - 1 &&
-                          message.id === lastMessageId
+                          status === "streaming" && isLast(message, partIndex)
                         }
                       >
                         <ReasoningTrigger />

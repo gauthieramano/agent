@@ -1,7 +1,12 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { openai } from "@ai-sdk/openai";
-import { convertToModelMessages, streamText, type UIMessage } from "ai";
+import {
+  convertToModelMessages,
+  stepCountIs,
+  streamText,
+  type UIMessage,
+} from "ai";
 import { MODELS, type ModelName } from "@/utils/constants";
 import { executePythonCode } from "@/utils/tools";
 
@@ -11,6 +16,7 @@ export const maxDuration = 60;
 const MARKDOWN = path.join(process.cwd(), "utils/system-prompt.md");
 const SYSTEM_PROMPT = readFileSync(MARKDOWN, "utf-8");
 const TOOLS = { executePythonCode };
+const MAX_STEPS = 5;
 
 type JsonRequest = {
   messages: UIMessage[];
@@ -24,6 +30,7 @@ export async function POST(req: Request) {
     messages: convertToModelMessages(messages),
     system: SYSTEM_PROMPT,
     tools: TOOLS,
+    stopWhen: stepCountIs(MAX_STEPS),
 
     model: openai(MODELS[model]),
 
