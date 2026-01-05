@@ -21,7 +21,7 @@ import TextUiPartMessage from "@/components/text-ui-part-message";
 import type { ModelName } from "@/utils/constants";
 
 export default function Home() {
-  const [model, setModel] = useState<ModelName>("GPT-5.1");
+  const [model, setModel] = useState<ModelName>("GPT-5.2");
 
   const { messages, sendMessage, status, regenerate } = useChat({
     onFinish: ({ message }) => {
