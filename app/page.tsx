@@ -15,6 +15,7 @@ import {
   ReasoningTrigger,
 } from "@/components/ai-elements/reasoning";
 import PromptInputSection from "@/components/prompt-input-section";
+import PythonCodeToolMessage from "@/components/python-code-tool-message";
 import TextUiPartMessage from "@/components/text-ui-part-message";
 import type { ModelName } from "@/utils/constants";
 
@@ -46,6 +47,14 @@ export default function Home() {
                         part={part}
                         role={message.role}
                         regenerate={regenerate}
+                      />
+                    ))
+
+                    .with({ type: "tool-executePythonCode" }, (part) => (
+                      <PythonCodeToolMessage
+                        key={`${message.id}-${part.toolCallId}`}
+                        part={part}
+                        role={message.role}
                       />
                     ))
 
