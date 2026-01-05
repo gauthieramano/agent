@@ -68,3 +68,7 @@ It uses:
 - [Zod](https://zod.dev) _(v4)_
 - [Biome](https://biomejs.dev) _(v2)_
 - [Pyodide](https://pyodide.org/) _(v0.29)_
+
+## Preview
+
+![Application preview](/docs/preview.jpg)
