@@ -2,26 +2,27 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { openai } from "@ai-sdk/openai";
 import {
-  convertToModelMessages,
+  type SystemModelMessage,
   stepCountIs,
-  streamText,
+  ToolLoopAgent,
   type ToolSet,
-  type UIMessage,
 } from "ai";
 import { MODELS, type ModelName } from "./constants";
 import { executePythonCode } from "./python-tool";
 
 const MARKDOWN = path.join(process.cwd(), "utils/system-prompt.md");
 
-const SYSTEM_PROMPT = readFileSync(MARKDOWN, "utf-8");
+const SYSTEM_PROMPT = {
+  role: "system",
+  content: readFileSync(MARKDOWN, "utf-8"),
+} satisfies SystemModelMessage;
 
 const TOOLS = { executePythonCode } satisfies ToolSet;
 const MAX_STEPS = 5;
 
-export const streamTextResult = (messages: UIMessage[], model: ModelName) =>
-  streamText({
-    messages: convertToModelMessages(messages),
-    system: SYSTEM_PROMPT,
+export const pythonAgent = (model: ModelName) =>
+  new ToolLoopAgent({
+    instructions: SYSTEM_PROMPT,
     tools: TOOLS,
     stopWhen: stepCountIs(MAX_STEPS),
 

@@ -1,6 +1,6 @@
-import type { UIMessage } from "ai";
+import { createAgentUIStreamResponse, type UIMessage } from "ai";
 import type { ModelName } from "@/utils/constants";
-import { streamTextResult } from "@/utils/python-agent";
+import { pythonAgent } from "@/utils/python-agent";
 
 // Allow streaming responses up to 1 minute
 export const maxDuration = 60;
@@ -13,7 +13,8 @@ type JsonRequest = {
 export async function POST(req: Request) {
   const { messages, model }: JsonRequest = await req.json();
 
-  const result = streamTextResult(messages, model);
-
-  return result.toUIMessageStreamResponse({ sendReasoning: true });
+  return createAgentUIStreamResponse({
+    agent: pythonAgent(model),
+    uiMessages: messages,
+  });
 }
